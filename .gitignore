@@ -1,0 +1,51 @@
+gitignore
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+/nbproject/private/
+/build/classes/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Visual Studio Code
+.vscode/
+
+# Flutter/Dart
+.dart_tool/
+.packages
+.pub-cache/
+/build/
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/App.framework
+/ios/Flutter/Flutter.framework
+/ios/Flutter/ephemeral/
+/ios/Flutter/app.flx
+/ios/Flutter/flutter_assets/
+/ios/Runner/GeneratedPluginRegistrant.*
+/android/app/build/
+/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+/android/.gradle/
+/android/local.properties
+/android/key.properties
+/android/app/src/main/kotlin/com/example/*
+!/android/app/src/main/kotlin/com/example/your_app_name/ # Allow your app's main package
+
+# Secret files
+secrets.json
