@@ -1,32 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'screens/home_screen.dart';
+
+import 'services/supabase_service.dart';
+import 'pages/auth/sign_in_page.dart';
+import 'pages/auth/sign_up_page.dart';
+import 'pages/item/items_page.dart';
+import 'pages/item/add_item_page.dart';
+import 'pages/item/item_detail_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Supabase.initialize(
-    url: 'https://muqvcypbvdgehlfhibqt.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11cXZjeXBidmRnZWhsZmhpYnF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0NDE0ODcsImV4cCI6MjA3OTAxNzQ4N30.scQlvspn1IxwTEoRfN3U0Px-zrlnT6wAG6CCC1cEd54',
+    url: 'https://dajktqhapgaeegfcgtro.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhamt0cWhhcGdhZWVnZmNndHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1OTczMDEsImV4cCI6MjA2MjE3MzMwMX0.VBQg5K_ePUumQlxt3MG2YCtNkdnNcwUgqnV8rm5Yekc',
   );
-
-  runApp(const RootsOfLife());
+  runApp(const App());
 }
 
-class RootsOfLife extends StatelessWidget {
-  const RootsOfLife({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => SupabaseService(),
+      child: const AppView(),
+    );
+  }
+}
 
+class AppView extends StatelessWidget {
+  const AppView({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Roots of Life",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.green,
-        fontFamily: 'Roboto',
-      ),
-      home: const HomeScreen(),
+      title: 'Thrift Store',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const AuthGate(),
+      routes: {
+        '/signin': (_) => SignInPage(),
+        '/signup': (_) => SignUpPage(),
+        '/items': (_) => const ItemsPage(),
+        '/add': (_)   => AddItemPage(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/detail') {
+          final itemId = settings.arguments as int;
+          return MaterialPageRoute(
+            builder: (_) => ItemDetailPage(itemId: itemId),
+          );
+        }
+        return null;
+      },
     );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final session = Supabase.instance.client.auth.currentSession;
+    return session != null ? const ItemsPage() : SignInPage();
   }
 }
